@@ -33,6 +33,9 @@ def subtract(a,b):
     c.append(a[2] - b[2])
     return c
 
+def length(a):
+    return((a[0] ** 2 + a[1] ** 2 + a[2] ** 2) ** (1/2))
+
 def dot(a,b):
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 
@@ -53,25 +56,32 @@ def naiveHull(polygon):
         v1 = subtract(triad[0], triad[1])
         v2 = subtract(triad[0], triad[2])
         upwardsNormal = unitize(positiveCross(v1,v2))
+        if triad == ([3, 0, 0.0], [0, 2, 2.5], [0, 3, 2.0]):
+            print(upwardsNormal)
         if upwardsNormal[2] != 0:
             onHull = True
             for p in ps:
                 v3 = subtract(p, triad[0])
-                if dot(v3, upwardsNormal) < 0:
+                if triad == ([3, 0, 0.0], [0, 2, 2.5], [0, 3, 2.0]):
+                    print(p, dot(v3, upwardsNormal))
+                if dot(v3, upwardsNormal) < -0.0000001:
                     onHull = False
             if onHull:
                 hull.append([list(triad), upwardsNormal])
 
-    blah = True
-    while blah:
-        blah = False
+    done = False
+    while not done:
+        done = True
         for m in range(0, len(hull)):
             for n in range(m, len(hull)):
-                if len([x for x in hull[m][0] if x in hull[n][0]]) >= 2 and m != n and hull[m][1] == hull[n][1]:
-                    blah = True
+                if len([x for x in hull[m][0] if x in hull[n][0]]) >= 2 and m != n and length(subtract(hull[m][1], hull[n][1])) <= 0.00000001:
+                    done = False
                     hull[m] = [list(map(list, set(map(tuple, hull[m][0] + hull[n][0])))), hull[m][1]]
                     hull.remove(hull[n])
                     break
+
+    subdivision = []    
     for x in hull:
-        print(x)
-    print(len(hull))
+        subdivision.append(x[0])
+
+    return subdivision

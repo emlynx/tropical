@@ -4,19 +4,19 @@ def toPolygon(polynomial):
     max_xs = 0
     max_ys = 0
     for term in summed_terms:
-        coeff = int(term.split('*')[0])
+        coeff = float(term.split('*')[0])
         
         xs = 0
         if "x" in term:
             xs = 1
             if "x^" in term:
-                xs = int(term[term.index("x^") + 2])
+                xs = int(term.split("^")[1])
         
         ys = 0
         if "y" in term:
             ys = 1
             if "y^" in term:
-                ys = int(term[term.index("y^") + 2])
+                ys = int(term.split("^")[1])
                 
         terms.append([coeff, xs, ys])
         if xs > max_xs:
@@ -33,7 +33,6 @@ def toPolygon(polynomial):
             row.append('i')
 
     for term in terms:
-        print(term)
         polygon[term[2]][term[1]] = term[0]
         
-    print(polygon)
+    return(polygon)
