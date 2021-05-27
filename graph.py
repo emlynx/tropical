@@ -13,8 +13,13 @@ def subtract(a,b):
 def dot(a,b):
     return a[0] * b[0] + a[1] * b[1]
 
+def unitize(a):
+    b = []
+    b.append(a[0] / ((a[0] ** 2 + a[1] ** 2) ** (1/2)))
+    b.append(a[1] / ((a[0] ** 2 + a[1] ** 2) ** (1/2)))
+    return b
+
 def graph(polynomial):
-    print(toPolygon.toPolygon(polynomial))
     subdivision = naiveHull.naiveHull(toPolygon.toPolygon(polynomial))
     vertices = findPoints.findPoints(subdivision)
     reducedSubdivision = []
@@ -52,7 +57,7 @@ def graph(polynomial):
                         perpendicular[0] = -perpendicular[0]
                         perpendicular[1] = -perpendicular[1]
                         break
-            rayCluster.append(perpendicular)
+            rayCluster.append(unitize(perpendicular))
         rays.append(rayCluster)
 
     print(vertices)

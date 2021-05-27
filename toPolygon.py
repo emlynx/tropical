@@ -4,19 +4,23 @@ def toPolygon(polynomial):
     max_xs = 0
     max_ys = 0
     for term in summed_terms:
-        coeff = float(term.split('*')[0])
+        subterms = term.split('*')
+        
+        coeff = float(subterms[0])
         
         xs = 0
-        if "x" in term:
-            xs = 1
-            if "x^" in term:
-                xs = int(term.split("^")[1])
-        
         ys = 0
-        if "y" in term:
-            ys = 1
-            if "y^" in term:
-                ys = int(term.split("^")[1])
+
+        if len(subterms) > 1:
+            for subterm in subterms[1:]:
+                if "x" in subterm:
+                    xs = xs + 1
+                    if "x^" in subterm:
+                        xs = xs - 1 + int(subterm.split("^")[1])
+                if "y" in subterm:
+                    ys = ys + 1
+                    if "y^" in subterm:
+                        ys = ys - 1 + int(subterm.split("^")[1])
                 
         terms.append([coeff, xs, ys])
         if xs > max_xs:
